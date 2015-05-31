@@ -15,11 +15,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/**
- * 
- * @author Dyego Souza do Carmo
- * @since 
- */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface SwingColumn {

@@ -16,11 +16,6 @@ import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- * 
- * @author Dyego Souza do Carmo
- * @since 
- */
 public class MyTableModel extends DefaultTableModel {
 
     private static final long serialVersionUID = 1L;
@@ -29,12 +24,6 @@ public class MyTableModel extends DefaultTableModel {
     private List<Method> fieldToData = new LinkedList<Method>();
     private final JTable tableToControl;
 
-    /**
-     * Construtor padrão
-     *
-     * @author Dyego Souza do Carmo
-     * @version 1.0, 
-     */
     public MyTableModel(Class entityClassToList, List entitysToList,JTable tableToControl) {
         super();
         this.entitysToList = entitysToList;
