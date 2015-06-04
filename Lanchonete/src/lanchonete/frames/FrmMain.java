@@ -84,6 +84,11 @@ public class FrmMain extends javax.swing.JFrame {
         btnSells.setText("Vendas");
         btnSells.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSells.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSells.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSellsActionPerformed(evt);
+            }
+        });
 
         btnSchedule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/schedule.png"))); // NOI18N
         btnSchedule.setText("Agenda");
@@ -210,6 +215,11 @@ public class FrmMain extends javax.swing.JFrame {
         FrmUser dialog = new FrmUser(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_miMenuVenderActionPerformed
+
+    private void btnSellsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSellsActionPerformed
+        FrmSell dialog = new FrmSell(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnSellsActionPerformed
 
     /**
      * @param args the command line arguments

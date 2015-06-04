@@ -1,13 +1,18 @@
 package lanchonete.entity;
 
 import java.util.Objects;
+import lanchonete.util.SwingColumn;
 
 public class SellItem {
     
     private Integer id;
+    @SwingColumn(description="Produto")
     private Product product;
     private Sell sell;
+    @SwingColumn(description="Quantidade")
     private Integer qnt;
+    @SwingColumn(description="Total")
+    private Double totalOfItem;
 
     public Integer getId() {
         return id;
@@ -40,6 +45,15 @@ public class SellItem {
     public void setQnt(Integer qnt) {
         this.qnt = qnt;
     }
+
+    public Double getTotalOfItem() {
+        return totalOfItem;
+    }
+
+    public void setTotalOfItem(Double totalOfItem) {
+        this.totalOfItem = totalOfItem;
+    }
+    
 
     @Override
     public int hashCode() {

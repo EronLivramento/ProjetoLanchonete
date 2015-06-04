@@ -215,7 +215,7 @@ public class FrmAddProduct extends javax.swing.JDialog {
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**

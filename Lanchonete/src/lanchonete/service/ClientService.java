@@ -61,4 +61,14 @@ public class ClientService {
         }
         return toReturn;
     }
+
+    public Client findByTelephone(String telephone) throws ServiceException {
+        Client toReturn = null;
+        try {
+            toReturn = dao.findByTelephone(telephone);
+        } catch (PersistenceException ex) {
+            throw new ServiceException(ex.getMessage());
+        }
+        return toReturn;
+    }
 }

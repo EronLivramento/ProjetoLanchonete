@@ -27,7 +27,15 @@ public class SellDao extends GenericDao{
     private static final String FIND_SELL_ITEM_BY_ID = "SELECT * FROM SELL_ITEM WHERE ID=?";
     private static final String FIND_SELL_ALL = "SELECT * FROM SELL";
     private static final String FIND_SELL_ITEM_ALL = "SELECT * FROM SELL_ITEM";
-     
+    
+    public void save(Sell sell) throws PersistenceException{
+        if(sell.getId() == null){
+            insertSell(sell);
+        }else{
+            updateSell(sell);
+        }
+    }
+    
     public void insertSell(Sell sell) throws PersistenceException{
         Connection conn = JDBCConection.getIntance().getConnection();
         PreparedStatement pstm = null;
@@ -68,7 +76,7 @@ public class SellDao extends GenericDao{
                 totalOfSale += item.getProduct().getPrice() * item.getQnt();
             }
             pstm = conn.prepareStatement(UPDATE_SELL);
-            executeCommand(pstm,sell.getVender().getId(),totalOfSale,sell.getDeliveryFee());
+            executeCommand(pstm,sell.getVender().getId(),totalOfSale,sell.getDeliveryFee(),sell.getId());
             for (SellItem item : sell.getItens()) {
                 updateSellItem(item);
             }
@@ -83,7 +91,7 @@ public class SellDao extends GenericDao{
         PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(UPDATE_SELL_ITEM);
-            executeCommand(pstm,sellItem.getProduct().getId(),sellItem.getSell().getId(),sellItem.getQnt());
+            executeCommand(pstm,sellItem.getProduct().getId(),sellItem.getSell().getId(),sellItem.getQnt(),sellItem.getId());
         } catch (SQLException ex) {
             throw new PersistenceException("Erro ao atualizar esse item");
         }finally{
@@ -132,6 +140,24 @@ public class SellDao extends GenericDao{
             JDBCConection.close(conn, pstm,rs);
         }
         return sell;
+    }
+      public List<Sell> findAll() throws PersistenceException{
+        List<Sell> list = new LinkedList<>();
+        Connection conn = JDBCConection.getIntance().getConnection();
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            pstm = conn.prepareStatement(FIND_SELL_ALL);
+            rs = executeQuery(pstm);
+            while(rs.next()){
+                list.add(populateSellInfo(rs));
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("Erro ao listar as venda");
+        }finally{
+            JDBCConection.close(conn, pstm,rs);
+        }
+        return list;
     }
     
     private Sell populateSellInfo(ResultSet rs) throws SQLException, PersistenceException{

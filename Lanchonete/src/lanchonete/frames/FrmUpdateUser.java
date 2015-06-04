@@ -185,7 +185,7 @@ public class FrmUpdateUser extends javax.swing.JDialog {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        setVisible(false);
+        this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelActionPerformed
 

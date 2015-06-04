@@ -6,7 +6,7 @@ import lanchonete.util.SwingColumn;
 public class Adress {
     
     private Integer id;
-    @SwingColumn(description = "Rua", colorOfBackgound = "")
+    @SwingColumn(description = "Rua")
     private String street;
     private Integer number;
     private String city;
@@ -77,7 +77,7 @@ public class Adress {
 
     @Override
     public String toString() {
-        return " "+ street;
+        return street;
     }
     
 }

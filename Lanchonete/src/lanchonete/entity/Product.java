@@ -5,17 +5,17 @@ import lanchonete.util.SwingColumn;
 
 public class Product {
     
-    @SwingColumn(description = "id",colorOfBackgound = "")
+    @SwingColumn(description = "id")
     private Integer id;
-    @SwingColumn(description = "nome",colorOfBackgound = "")
+    @SwingColumn(description = "nome")
     private String name;
-    @SwingColumn(description = "Tipo",colorOfBackgound = "")
+    @SwingColumn(description = "Tipo")
     private TypeProduct type;
-    @SwingColumn(description = "preço",colorOfBackgound = "")
+    @SwingColumn(description = "preço")
     private Double price;
-    @SwingColumn(description = "descrição",colorOfBackgound = "")
+    @SwingColumn(description = "descrição")
     private String description;
-    @SwingColumn(description = "Em estoque",colorOfBackgound = "")
+    @SwingColumn(description = "Em estoque")
     private Integer stock;
 
     public Integer getId() {
@@ -87,6 +87,9 @@ public class Product {
         }
         return true;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return  name;
+    }
 }

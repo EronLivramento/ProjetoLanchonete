@@ -3,13 +3,18 @@ package lanchonete.entity;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import lanchonete.util.SwingColumn;
 
 public class Sell {
 
+    @SwingColumn(description = "id")
     private Integer id;
+    @SwingColumn(description = "Vendedor")
     private User vender;
-    private Double total;
+    @SwingColumn(description = "Data da Venda")
     private Date dateOfSale;
+    @SwingColumn(description = "Total")
+    private Double total;
     private List<SellItem> itens;
     private Double deliveryFee;
 

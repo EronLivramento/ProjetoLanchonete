@@ -209,7 +209,7 @@ public class FrmAddClient extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNameActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed

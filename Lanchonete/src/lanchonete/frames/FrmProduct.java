@@ -57,28 +57,40 @@ public class FrmProduct extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/add.png"))); // NOI18N
         btnNew.setText("Add");
+        btnNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewActionPerformed(evt);
             }
         });
 
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/edit.jpg"))); // NOI18N
         btnUpdate.setText("Alterar");
+        btnUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnUpdate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
 
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/delete.png"))); // NOI18N
         btnRemove.setText("Remover");
+        btnRemove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRemove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
             }
         });
 
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/back-icon.png"))); // NOI18N
         btnBack.setText("Voltar");
+        btnBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
@@ -150,7 +162,7 @@ public class FrmProduct extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed

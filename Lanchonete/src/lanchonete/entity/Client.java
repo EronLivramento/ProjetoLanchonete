@@ -5,15 +5,15 @@ import lanchonete.util.SwingColumn;
 
 public class Client {
     
-    @SwingColumn(description = "id",colorOfBackgound = "")
+    @SwingColumn(description = "id")
     private Integer id;
-    @SwingColumn(description = "Nome",colorOfBackgound = "")
+    @SwingColumn(description = "Nome")
     private String name;
-    @SwingColumn(description = "Sobrenome",colorOfBackgound = "")
+    @SwingColumn(description = "Sobrenome")
     private String secondName;
-    @SwingColumn(description = "Telefone",colorOfBackgound = "")
+    @SwingColumn(description = "Telefone")
     private String telephone;
-    @SwingColumn(description = "Endereço",colorOfBackgound = "")
+    @SwingColumn(description = "Endereço")
     private Adress adress;
 
     public Integer getId() {
@@ -54,6 +54,11 @@ public class Client {
 
     public void setSecondName(String segundName) {
         this.secondName = segundName;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
     
 

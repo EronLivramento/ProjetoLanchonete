@@ -5,11 +5,11 @@ import lanchonete.util.SwingColumn;
 
 public class User {
 
-    @SwingColumn(description = "id",colorOfBackgound = "")
+    @SwingColumn(description = "id")
     private Integer id;
-    @SwingColumn(description = "nome",colorOfBackgound = "")
+    @SwingColumn(description = "nome")
     private String name;
-    @SwingColumn(description = "login",colorOfBackgound = "")
+    @SwingColumn(description = "login")
     private String login;
     private String password;
 
@@ -69,6 +69,11 @@ public class User {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
     
 }
