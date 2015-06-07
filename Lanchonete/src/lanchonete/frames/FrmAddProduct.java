@@ -81,7 +81,11 @@ public class FrmAddProduct extends javax.swing.JDialog {
 
         lblPrice.setText("Preço:");
 
+        txtPrice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         lblStock.setText("Quantidade em estoque:");
+
+        txtStock.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         lblDiscription.setText("Descrição:");
 

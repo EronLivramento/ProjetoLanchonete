@@ -32,7 +32,7 @@ public class FrmSell extends javax.swing.JDialog {
     public FrmSell(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        LoadInitialData();
+        loadInitialData();
         addSellTableListener();
     }
 
@@ -269,7 +269,7 @@ public class FrmSell extends javax.swing.JDialog {
     private javax.swing.JTable tblSellItem;
     // End of variables declaration//GEN-END:variables
 
-    private void LoadInitialData() {
+    public void loadInitialData() {
         try {
             listSell = service.findAll();
             tblSell.setModel(new MyTableModel(Sell.class, listSell, tblSell));

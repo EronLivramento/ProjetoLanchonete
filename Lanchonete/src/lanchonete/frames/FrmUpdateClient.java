@@ -81,9 +81,13 @@ public class FrmUpdateClient extends javax.swing.JDialog {
 
         lblTelephone.setText("Telefone:");
 
+        txtTelephone.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         lblStreet.setText("Rua:");
 
         lblNumber.setText("Numero:");
+
+        txtNumber.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         lblCity.setText("Cidade: ");
 

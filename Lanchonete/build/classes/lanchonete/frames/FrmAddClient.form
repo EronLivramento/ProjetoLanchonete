@@ -188,6 +188,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTelephone">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblStreet">
           <Properties>
@@ -202,6 +205,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtNumber">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblCity">
           <Properties>

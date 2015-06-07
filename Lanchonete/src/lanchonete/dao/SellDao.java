@@ -6,8 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import lanchonete.entity.Product;
 import lanchonete.entity.Sell;
 import lanchonete.entity.SellItem;
+import lanchonete.entity.TypeProduct;
+import lanchonete.entity.User;
 import lanchonete.exceptions.PersistenceException;
 import lanchonete.util.JDBCConection;
 
@@ -15,59 +20,51 @@ import lanchonete.util.JDBCConection;
  *
  * @author Livramento
  */
-public class SellDao extends GenericDao{
-    
-    private static final String INSERT_SELL_ITEM = "INSERT INTO SELL_ITEM(ID_PRODUCT,ID_SELL,QNT)VALUES()";
-    private static final String INSERT_SELL = "INSERT INTO SELL(ID_VENDER,TOTAL,DATE_OF_SALE,DELIVERY_FEE)VALUES(?,?,?)";
-    private static final String UPDATE_SELL = "UPDATE SELL SET ID_VENDER= ?, TOTAL = ?, DELIVERY_FEE WHERE ID = ?";
-    private static final String UPDATE_SELL_ITEM = "UPDATE SELL_ITEM SET ID_PRODUCT= ?, ID_SELL= ?, QNT= ? WHERE ID=?";
-    private static final String DELETE_SELL = "DELETE FROM SELL WHERE ID = ?";
-    private static final String DELETE_SELL_ITEM = "DELETE FROM SELL_ITEM WHERE ID = ?";
+public class SellDao extends GenericDao {
+
+    private static final String INSERT_SELL = "INSERT INTO SELL(ID_VENDER,TOTAL,DATE_OF_SALE,DELIVERY_FEE)VALUES(?,?,?,?)";
+    private static final String UPDATE_SELL = "UPDATE SELL SET ID_VENDER= ?, TOTAL = ?, DELIVERY_FEE WHERE ID_SELL = ?";
+    private static final String DELETE_SELL = "DELETE FROM SELL WHERE ID_SELL = ?";
     private static final String FIND_SELL_BY_ID = "SELECT * FROM SELL WHERE ID=?";
-    private static final String FIND_SELL_ITEM_BY_ID = "SELECT * FROM SELL_ITEM WHERE ID=?";
-    private static final String FIND_SELL_ALL = "SELECT * FROM SELL";
-    private static final String FIND_SELL_ITEM_ALL = "SELECT * FROM SELL_ITEM";
-    
-    public void save(Sell sell) throws PersistenceException{
-        if(sell.getId() == null){
+    private static final String FIND_SELL_ALL = "SELECT S.*,SI.*,V.NAME,P.NAME as NAME_PRODUCT, P.PRICE FROM SELL S,SELL_ITEM SI, USER V, PRODUCT P WHERE S.ID_SELL = SI.ID_SELL AND S.ID_VENDER = V.ID AND SI.ID_PRODUCT = P.ID";
+    private final SellItemDao sellItemDao = new SellItemDao();
+
+    public void save(Sell sell) throws PersistenceException {
+        if (sell.getId() == null) {
             insertSell(sell);
-        }else{
+        } else {
             updateSell(sell);
         }
     }
-    
-    public void insertSell(Sell sell) throws PersistenceException{
+
+    public void insertSell(Sell sell) throws PersistenceException {
         Connection conn = JDBCConection.getIntance().getConnection();
         PreparedStatement pstm = null;
+        ResultSet rs = null;
         try {
             double totalOfSale = 0;
+            Integer toReturn = null;
             for (SellItem item : sell.getItens()) {
                 totalOfSale += item.getProduct().getPrice() * item.getQnt();
             }
-            pstm = conn.prepareStatement(INSERT_SELL);
-            executeCommand(pstm,sell.getVender().getId(),totalOfSale,sell.getDateOfSale(),sell.getDeliveryFee());
+            pstm = conn.prepareStatement(INSERT_SELL, PreparedStatement.RETURN_GENERATED_KEYS);
+            executeCommand(pstm, sell.getVender().getId(), totalOfSale, sell.getDateOfSale(), sell.getDeliveryFee());
+            rs = pstm.getGeneratedKeys();
+            if (rs.next()) {
+                toReturn = rs.getInt(1);
+            }
+            sell.setId(toReturn);
             for (SellItem item : sell.getItens()) {
-                insertSellItem(item);
+                sellItemDao.insertSellItem(item);
             }
         } catch (SQLException ex) {
             throw new PersistenceException("Erro ao salvar essa venda");
-        }finally{
-            JDBCConection.close(conn, pstm);
+        } finally {
+            JDBCConection.close(conn, pstm, rs);
         }
     }
-    public void insertSellItem(SellItem sellItem) throws PersistenceException{
-        Connection conn = JDBCConection.getIntance().getConnection();
-        PreparedStatement pstm = null;
-        try {
-            pstm = conn.prepareStatement(INSERT_SELL_ITEM);
-            executeCommand(pstm,sellItem.getProduct().getId(),sellItem.getSell().getId(),sellItem.getQnt());
-        } catch (SQLException ex) {
-            throw new PersistenceException("Erro ao salvar esse item");
-        }finally{
-            JDBCConection.close(conn, pstm);
-        }
-    }
-    public void updateSell(Sell sell) throws PersistenceException{
+
+    public void updateSell(Sell sell) throws PersistenceException {
         Connection conn = JDBCConection.getIntance().getConnection();
         PreparedStatement pstm = null;
         try {
@@ -76,146 +73,98 @@ public class SellDao extends GenericDao{
                 totalOfSale += item.getProduct().getPrice() * item.getQnt();
             }
             pstm = conn.prepareStatement(UPDATE_SELL);
-            executeCommand(pstm,sell.getVender().getId(),totalOfSale,sell.getDeliveryFee(),sell.getId());
+            executeCommand(pstm, sell.getVender().getId(), totalOfSale, sell.getDeliveryFee(), sell.getId());
             for (SellItem item : sell.getItens()) {
-                updateSellItem(item);
+                sellItemDao.updateSellItem(item);
             }
         } catch (SQLException ex) {
             throw new PersistenceException("Erro ao atualizar essa venda");
-        }finally{
+        } finally {
             JDBCConection.close(conn, pstm);
         }
     }
-    public void updateSellItem(SellItem sellItem) throws PersistenceException{
-        Connection conn = JDBCConection.getIntance().getConnection();
-        PreparedStatement pstm = null;
-        try {
-            pstm = conn.prepareStatement(UPDATE_SELL_ITEM);
-            executeCommand(pstm,sellItem.getProduct().getId(),sellItem.getSell().getId(),sellItem.getQnt(),sellItem.getId());
-        } catch (SQLException ex) {
-            throw new PersistenceException("Erro ao atualizar esse item");
-        }finally{
-            JDBCConection.close(conn, pstm);
-        }
-    }
-    public void removeSell(Integer idSell) throws PersistenceException{
+
+    public void removeSell(Integer idSell) throws PersistenceException {
         Connection conn = JDBCConection.getIntance().getConnection();
         PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(DELETE_SELL);
-            removeSellItem(idSell);
+            sellItemDao.removeSellItem(idSell);
             executeCommand(pstm, idSell);
         } catch (SQLException ex) {
             throw new PersistenceException("Erro ao remover essa venda");
-        }finally{
+        } finally {
             JDBCConection.close(conn, pstm);
         }
     }
-    public void removeSellItem(Integer id) throws PersistenceException{
-        Connection conn = JDBCConection.getIntance().getConnection();
-        PreparedStatement pstm = null;
-        try {
-            pstm = conn.prepareStatement(DELETE_SELL_ITEM);
-            executeCommand(pstm, id);
-        } catch (SQLException ex) {
-            throw new PersistenceException("Erro ao remover esse item");
-        }finally{
-            JDBCConection.close(conn, pstm);
-        }
-    }
-    public Sell sellFindById(Integer id) throws PersistenceException{
+
+    public Sell sellFindById(Integer id) throws PersistenceException {
         Sell sell = null;
-        Connection conn = JDBCConection.getIntance().getConnection();
+        Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
         try {
+            conn = JDBCConection.getIntance().getConnection();
             pstm = conn.prepareStatement(FIND_SELL_BY_ID);
             rs = executeQuery(pstm, id);
-            if(rs.next()){
-               sell = populateSellInfo(rs);
+            if (rs.next()) {
+                sell = populateSellInfo(rs);
             }
         } catch (SQLException ex) {
             throw new PersistenceException("Erro ao procurar essa venda");
-        }finally{
-            JDBCConection.close(conn, pstm,rs);
+        } finally {
+            JDBCConection.close(conn, pstm, rs);
         }
         return sell;
     }
-      public List<Sell> findAll() throws PersistenceException{
+
+    public List<Sell> findAll() throws PersistenceException {
         List<Sell> list = new LinkedList<>();
-        Connection conn = JDBCConection.getIntance().getConnection();
+        Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
         try {
+            conn = JDBCConection.getIntance().getConnection();
             pstm = conn.prepareStatement(FIND_SELL_ALL);
             rs = executeQuery(pstm);
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(populateSellInfo(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new PersistenceException("Erro ao listar as venda");
-        }finally{
-            JDBCConection.close(conn, pstm,rs);
+        } finally {
+            JDBCConection.close(conn, pstm, rs);
         }
         return list;
     }
-    
-    private Sell populateSellInfo(ResultSet rs) throws SQLException, PersistenceException{
+
+    private Sell populateSellInfo(ResultSet rs) throws SQLException, PersistenceException {
         Sell toReturn = new Sell();
-        UserDao userDao = new UserDao();
-        toReturn.setId(rs.getInt("ID"));
-        toReturn.setVender(userDao.findbyid(rs.getInt("ID")));
+        User vender = new User();
+        List<SellItem> sellItem = new LinkedList<>();
+        vender.setName(rs.getString("NAME"));
+        toReturn.setId(rs.getInt("ID_SELL"));
+        toReturn.setVender(vender);
         toReturn.setDateOfSale(rs.getDate("DATE_OF_SALE"));
         toReturn.setTotal(rs.getDouble("TOTAL"));
         toReturn.setDeliveryFee(rs.getDouble("DELIVERY_FEE"));
-        toReturn.setItens(findSellItens(toReturn));
-        return toReturn;
-    }
-    public SellItem sellItemFindById(Integer id) throws PersistenceException{
-        Connection conn = JDBCConection.getIntance().getConnection();
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-        SellItem sellItem = null;
-        try {
-            pstm = conn.prepareStatement(FIND_SELL_ITEM_BY_ID);
-            rs = executeQuery(pstm, id);
-            if(rs.next()){
-                sellItem = populateSellItemInfo(rs);
-            }
-        } catch (SQLException ex) {
-            throw new PersistenceException("Erro ao procurar esse item" );
-        }finally{
-            JDBCConection.close(conn, pstm,rs);
+        while (rs.next()) {
+            sellItem.add(populateSellItemInfo(rs, toReturn));
         }
-        return sellItem;
-    }
-
-    public List<SellItem> findSellItens(Sell sell) throws PersistenceException {
-        Connection conn = JDBCConection.getIntance().getConnection();
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-        List<SellItem> toReturn = new LinkedList<>();
-        try {
-            pstm = conn.prepareStatement(FIND_SELL_BY_ID);
-            rs = executeQuery(pstm, sell.getId());
-            while(rs.next()){
-                toReturn.add(populateSellItemInfo(rs,sell));
-            }
-        } catch (SQLException ex) {
-            throw new PersistenceException("Erro ao procurar esse item");
-        }finally{
-            JDBCConection.close(conn, pstm,rs);
-        }
+        toReturn.setItens(sellItem);
         return toReturn;
     }
 
-    public SellItem populateSellItemInfo(ResultSet rs, Sell... sell) throws SQLException, PersistenceException {
+    public SellItem populateSellItemInfo(ResultSet rs, Sell sell) throws SQLException, PersistenceException {
         SellItem toReturn = new SellItem();
-        ProductDao productDao = new ProductDao();
-        toReturn.setId(rs.getInt("ID"));
+        Product product = new Product();
+        product.setName(rs.getString("NAME_PRODUCT"));
+        product.setPrice(rs.getDouble("PRICE"));
+        toReturn.setId(rs.getInt("ID_SELL_ITEM"));
         toReturn.setQnt(rs.getInt("QNT"));
-        toReturn.setProduct(productDao.findById(rs.getInt("ID")));
-        toReturn.setSell(sellFindById(rs.getInt("ID_SELL")));
+        toReturn.setProduct(product);
+        toReturn.setSell(sell);
         return toReturn;
     }
 }

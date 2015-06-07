@@ -13,6 +13,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import lanchonete.entity.Client;
+import lanchonete.entity.Sell;
 import lanchonete.entity.SellItem;
 import lanchonete.entity.User;
 import lanchonete.exceptions.ServiceException;
@@ -82,12 +83,14 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
         txtDate = new javax.swing.JTextField();
         txtTotal = new javax.swing.JTextField();
         lblTotal = new javax.swing.JLabel();
+        lblDeliveryFee = new javax.swing.JLabel();
+        txtDeliveryFee = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblItens = new javax.swing.JTable();
         btnRemove = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnOk = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -104,7 +107,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
         jScrollPane2.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Adicionar Venda Balcão");
+        setTitle("Adicionar Venda Entrega");
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Controle de Venda"));
@@ -174,6 +177,20 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
 
         lblTotal.setText("Total da venda");
 
+        lblDeliveryFee.setText("Valor da Entrega");
+
+        txtDeliveryFee.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDeliveryFee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDeliveryFeeActionPerformed(evt);
+            }
+        });
+        txtDeliveryFee.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDeliveryFeeKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -189,6 +206,29 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbVendor, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(49, 49, 49))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblDate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDate))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblCity)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDistrict)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblTotal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -206,29 +246,13 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(lblSecondName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSecondName, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblDate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDate))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblCity)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblDistrict)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblTotal)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtSecondName, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(143, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(lblDeliveryFee)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtDeliveryFee, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,13 +282,17 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
                     .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblDistrict))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDeliveryFee)
+                    .addComponent(txtDeliveryFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDate)
                     .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTotal))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Itens"));
@@ -283,6 +311,11 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
         jScrollPane1.setViewportView(tblItens);
 
         btnRemove.setText("Remover Item");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
         btnAdd.setText("Adicionar Item");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -312,7 +345,12 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jButton1.setText("Ok");
+        btnOk.setText("Ok");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -334,7 +372,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(btnOk)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -342,11 +380,11 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnOk)
                     .addComponent(jButton2))
                 .addContainerGap())
         );
@@ -356,11 +394,12 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // TODO add your handling code here:
+        FrmAddItemOfSell dialog = new FrmAddItemOfSell(new javax.swing.JFrame(), true, itens, this);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtNameActionPerformed
 
     private void txtDistrictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDistrictActionPerformed
@@ -389,6 +428,53 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDateActionPerformed
 
+    private void txtDeliveryFeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDeliveryFeeActionPerformed
+        refreshItens();
+    }//GEN-LAST:event_txtDeliveryFeeActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        if (tblItens.getSelectedRow() == - 1) {
+            Message.addMessageError(new javax.swing.JFrame(), "Selecione um item para remover", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int result = Message.showConfirm(new javax.swing.JFrame(), "Você tem certeza ?", "Remover item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            itens.remove(tblItens.getSelectedRow());
+        }
+        refreshItens();
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void txtDeliveryFeeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDeliveryFeeKeyPressed
+
+    }//GEN-LAST:event_txtDeliveryFeeKeyPressed
+
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        if (itens.isEmpty()) {
+            Message.addMessageError(new javax.swing.JFrame(), "Lista de itens vazia!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int result = Message.showConfirm(new javax.swing.JFrame(), "Você tem certeza ?", "Finalizar venda", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            Sell sell = new Sell();
+            sell.setDateOfSale(new java.sql.Date(new java.util.Date().getTime()));
+            sell.setDeliveryFee(Double.parseDouble(txtDeliveryFee.getText()));
+            sell.setTotal(Double.parseDouble(txtTotal.getText().substring(2)));
+            sell.setVender((User) cmbVendor.getSelectedItem());
+            sell.setItens(itens);
+            for (SellItem sellItem : itens) {
+                sellItem.setSell(sell);
+            }
+
+            try {
+                service.save(sell);
+                control.loadInitialData();
+            } catch (ServiceException e) {
+                Message.addMessageError(new javax.swing.JFrame(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+    }//GEN-LAST:event_btnOkActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -398,9 +484,9 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnFind;
+    private javax.swing.JButton btnOk;
     private javax.swing.JButton btnRemove;
     private javax.swing.JComboBox cmbVendor;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -409,6 +495,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblCity;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblDeliveryFee;
     private javax.swing.JLabel lblDistrict;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNumber;
@@ -420,6 +507,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     private javax.swing.JTable tblItens;
     private javax.swing.JTextField txtCity;
     private javax.swing.JTextField txtDate;
+    private javax.swing.JTextField txtDeliveryFee;
     private javax.swing.JTextField txtDistrict;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNumber;
@@ -442,8 +530,12 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
         txtDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
     }
 
-    private void refreshItens() {
-        double value = 0;
+    public void refreshItens() {
+        double deliveryFee = 0;
+        if (txtDeliveryFee.getText().length() > 0) {
+            deliveryFee = Double.parseDouble(txtDeliveryFee.getText());
+        }
+        double value = deliveryFee;
         for (SellItem sellItem : itens) {
             value += sellItem.getProduct().getPrice() * sellItem.getQnt();
             sellItem.setTotalOfItem(sellItem.getProduct().getPrice() * sellItem.getQnt());

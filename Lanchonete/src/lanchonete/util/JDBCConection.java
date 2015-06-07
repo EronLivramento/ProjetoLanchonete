@@ -12,6 +12,8 @@ public class JDBCConection {
     private static ResourceBundle config;
     private static JDBCConection connection;
 
+   
+
     private JDBCConection() {
         config = ResourceBundle.getBundle("config");
     }
@@ -60,6 +62,18 @@ public class JDBCConection {
             }
         } catch (SQLException e) {
             e.getMessage();
+        }
+    }
+     public static void close(PreparedStatement pstm, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstm != null) {
+                pstm.close();
+            }
+        } catch (SQLException ex) {
+            ex.getMessage();
         }
     }
 }
