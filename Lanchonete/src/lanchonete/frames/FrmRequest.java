@@ -10,10 +10,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import lanchonete.entity.Sell;
+import lanchonete.entity.Request;
 import lanchonete.entity.SellItem;
 import lanchonete.exceptions.ServiceException;
-import lanchonete.service.SellService;
+import lanchonete.service.RequestService;
 import lanchonete.util.Message;
 import lanchonete.util.MyTableModel;
 
@@ -21,18 +21,18 @@ import lanchonete.util.MyTableModel;
  *
  * @author Livramento
  */
-public class FrmSell extends javax.swing.JDialog {
+public class FrmRequest extends javax.swing.JDialog {
 
     /**
      * Creates new form FrmSell
      */
-    private final SellService service = new SellService();
-    private List<Sell> listSell;
+    private final RequestService service = new RequestService();
+    private List<Request> listRequest;
 
-    public FrmSell(java.awt.Frame parent, boolean modal) {
+    public FrmRequest(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        loadInitialData();
+        loadInitalData();
         addSellTableListener();
     }
 
@@ -53,7 +53,7 @@ public class FrmSell extends javax.swing.JDialog {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblSell = new javax.swing.JTable();
+        tblRequest = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblSellItem = new javax.swing.JTable();
@@ -120,7 +120,7 @@ public class FrmSell extends javax.swing.JDialog {
             .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        tblSell.setModel(new javax.swing.table.DefaultTableModel(
+        tblRequest.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -131,7 +131,7 @@ public class FrmSell extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblSell);
+        jScrollPane1.setViewportView(tblRequest);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -200,7 +200,19 @@ public class FrmSell extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-        // TODO add your handling code here:
+        /* if (tblSell.getSelectedRow() == -1) {
+            Message.addMessageError(this, "Selecione o produto que deseja remover", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int result = Message.showConfirm(this, "Você tem certeza?", "Remover Produto", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                service.remove(listSell.get(tblSell.getSelectedRow()).getId());
+                loadInitalData();
+            } catch (ServiceException ex) {
+                Message.addMessageError(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }*/
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -208,7 +220,7 @@ public class FrmSell extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmSelectedSell dialog = new FrmSelectedSell(new javax.swing.JFrame(), true,service,this);
+        FrmAddRequest dialog = new FrmAddRequest(new javax.swing.JFrame(), true, service,this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -216,42 +228,7 @@ public class FrmSell extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmSell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmSell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmSell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmSell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                FrmSell dialog = new FrmSell(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -265,14 +242,14 @@ public class FrmSell extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable tblSell;
+    private javax.swing.JTable tblRequest;
     private javax.swing.JTable tblSellItem;
     // End of variables declaration//GEN-END:variables
 
-    public void loadInitialData() {
+    public void loadInitalData() {
         try {
-            listSell = service.findAll();
-            tblSell.setModel(new MyTableModel(Sell.class, listSell, tblSell));
+            listRequest = service.findAll();
+            tblRequest.setModel(new MyTableModel(Request.class, listRequest, tblRequest));
             tblSellItem.setModel(new MyTableModel(SellItem.class, new LinkedList<SellItem>(), tblSellItem));
         } catch (ServiceException ex) {
             Message.addMessageError(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -280,11 +257,11 @@ public class FrmSell extends javax.swing.JDialog {
     }
 
     private void addSellTableListener() {
-        tblSell.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        tblRequest.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                Sell selectedSell = listSell.get(tblSell.getSelectedRow());
-                tblSellItem.setModel(new MyTableModel(SellItem.class, selectedSell.getItens(), tblSell));
+                Request selectedRequest = listRequest.get(tblRequest.getSelectedRow());
+                tblSellItem.setModel(new MyTableModel(SellItem.class, selectedRequest.getSell().getItens(), tblRequest));
             }
         });
     }

@@ -243,14 +243,12 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtTelephone">
           <Properties>
-            <Property name="editable" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="4"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnFind">
           <Properties>
             <Property name="text" type="java.lang.String" value="Buscar"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFindActionPerformed"/>

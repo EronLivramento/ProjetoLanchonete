@@ -42,9 +42,11 @@ public class FrmMain extends javax.swing.JFrame {
         btnUsers = new javax.swing.JButton();
         btnClient = new javax.swing.JButton();
         btnSells = new javax.swing.JButton();
-        btnSchedule = new javax.swing.JButton();
+        btnRequest = new javax.swing.JButton();
         btnProducts = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblRequest = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         mMenu = new javax.swing.JMenu();
         miMenuClient = new javax.swing.JMenuItem();
@@ -90,10 +92,15 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
-        btnSchedule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/schedule.png"))); // NOI18N
-        btnSchedule.setText("Agenda");
-        btnSchedule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSchedule.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/schedule.png"))); // NOI18N
+        btnRequest.setText("Pedidos para entrega");
+        btnRequest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRequest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRequest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRequestActionPerformed(evt);
+            }
+        });
 
         btnProducts.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Images/product.png"))); // NOI18N
         btnProducts.setText("Produtos");
@@ -116,12 +123,12 @@ public class FrmMain extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSchedule, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnClient, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSells, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(236, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRequest)
+                .addContainerGap(181, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,21 +141,34 @@ public class FrmMain extends javax.swing.JFrame {
                     .addComponent(btnSells, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUsers, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProducts, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSchedule, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(btnRequest, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(79, 79, 79))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Agenda"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Pedidos para entrega"));
+
+        tblRequest.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblRequest);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 243, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
         );
 
         mMenu.setText("Menu");
@@ -221,6 +241,11 @@ public class FrmMain extends javax.swing.JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnSellsActionPerformed
 
+    private void btnRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestActionPerformed
+        FrmRequest dialog = new FrmRequest(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnRequestActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -260,15 +285,17 @@ public class FrmMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClient;
     private javax.swing.JButton btnProducts;
-    private javax.swing.JButton btnSchedule;
+    private javax.swing.JButton btnRequest;
     private javax.swing.JButton btnSells;
     private javax.swing.JButton btnUsers;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lWelcome;
     private javax.swing.JMenu mMenu;
     private javax.swing.JMenuItem miMenuClient;
     private javax.swing.JMenuItem miMenuVender;
+    private javax.swing.JTable tblRequest;
     // End of variables declaration//GEN-END:variables
 }

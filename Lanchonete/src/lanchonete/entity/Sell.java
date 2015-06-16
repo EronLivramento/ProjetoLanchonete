@@ -11,12 +11,14 @@ public class Sell {
     private Integer id;
     @SwingColumn(description = "Vendedor")
     private User vender;
+    @SwingColumn(description = "Cliente")
+    private Client client;
     @SwingColumn(description = "Data da Venda")
     private Date dateOfSale;
     @SwingColumn(description = "Total")
     private Double total;
+
     private List<SellItem> itens;
-    private Double deliveryFee;
 
     public Integer getId() {
         return id;
@@ -58,13 +60,14 @@ public class Sell {
         this.itens = itens;
     }
 
-    public Double getDeliveryFee() {
-        return deliveryFee;
+    public Client getClient() {
+        return client;
     }
 
-    public void setDeliveryFee(Double deliveryFee) {
-        this.deliveryFee = deliveryFee;
+    public void setClient(Client client) {
+        this.client = client;
     }
+
 
     @Override
     public int hashCode() {

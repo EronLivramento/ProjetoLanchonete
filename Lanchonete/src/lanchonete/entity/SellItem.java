@@ -4,14 +4,14 @@ import java.util.Objects;
 import lanchonete.util.SwingColumn;
 
 public class SellItem {
-    
+
     private Integer id;
-    @SwingColumn(description="Produto")
+    @SwingColumn(description = "Produto")
     private Product product;
     private Sell sell;
-    @SwingColumn(description="Quantidade")
+    @SwingColumn(description = "Quantidade")
     private Integer qnt;
-    @SwingColumn(description="Total")
+    @SwingColumn(description = "Total")
     private Double totalOfItem;
 
     public Integer getId() {
@@ -47,13 +47,15 @@ public class SellItem {
     }
 
     public Double getTotalOfItem() {
+        if (getProduct() != null) {
+            return getProduct().getPrice() * getQnt();
+        }
         return totalOfItem;
     }
 
     public void setTotalOfItem(Double totalOfItem) {
         this.totalOfItem = totalOfItem;
     }
-    
 
     @Override
     public int hashCode() {
@@ -76,6 +78,5 @@ public class SellItem {
         }
         return true;
     }
-    
-    
+
 }

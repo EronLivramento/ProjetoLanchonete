@@ -6,12 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lanchonete.entity.Adress;
+import lanchonete.entity.Client;
 import lanchonete.entity.Product;
 import lanchonete.entity.Sell;
 import lanchonete.entity.SellItem;
-import lanchonete.entity.TypeProduct;
 import lanchonete.entity.User;
 import lanchonete.exceptions.PersistenceException;
 import lanchonete.util.JDBCConection;
@@ -22,19 +21,20 @@ import lanchonete.util.JDBCConection;
  */
 public class SellDao extends GenericDao {
 
-    private static final String INSERT_SELL = "INSERT INTO SELL(ID_VENDER,TOTAL,DATE_OF_SALE,DELIVERY_FEE)VALUES(?,?,?,?)";
-    private static final String UPDATE_SELL = "UPDATE SELL SET ID_VENDER= ?, TOTAL = ?, DELIVERY_FEE WHERE ID_SELL = ?";
+    private static final String INSERT_SELL = "INSERT INTO SELL(ID_VENDER,ID_CLIENT,TOTAL,DATE_OF_SALE)VALUES(?,?,?,?)";
+    private static final String UPDATE_SELL = "UPDATE SELL SET ID_VENDER= ?,ID_CLIENT = ?, TOTAL = ? WHERE ID_SELL = ?";
     private static final String DELETE_SELL = "DELETE FROM SELL WHERE ID_SELL = ?";
     private static final String FIND_SELL_BY_ID = "SELECT * FROM SELL WHERE ID=?";
-    private static final String FIND_SELL_ALL = "SELECT S.*,SI.*,V.NAME,P.NAME as NAME_PRODUCT, P.PRICE FROM SELL S,SELL_ITEM SI, USER V, PRODUCT P WHERE S.ID_SELL = SI.ID_SELL AND S.ID_VENDER = V.ID AND SI.ID_PRODUCT = P.ID";
-    private final SellItemDao sellItemDao = new SellItemDao();
+    private static final String FIND_SELL_ALL = "SELECT S.*,C.*,A.*,V.NAME as name_vender  " +
+                                                "FROM SELL S, SELL_ITEM SI, USER V, ADRESS A, CLIENT C,PRODUCT P " +
+                                                "WHERE S.ID_VENDER = V.ID " +
+                                                "AND S.ID_CLIENT = C.ID " +
+                                                "AND C.ID_ADRESS = A.ID " +
+                                                "GROUP BY S.ID_SELL";
+    private static final SellItemDao sellItemDao = new SellItemDao();
 
     public void save(Sell sell) throws PersistenceException {
-        if (sell.getId() == null) {
             insertSell(sell);
-        } else {
-            updateSell(sell);
-        }
     }
 
     public void insertSell(Sell sell) throws PersistenceException {
@@ -48,7 +48,7 @@ public class SellDao extends GenericDao {
                 totalOfSale += item.getProduct().getPrice() * item.getQnt();
             }
             pstm = conn.prepareStatement(INSERT_SELL, PreparedStatement.RETURN_GENERATED_KEYS);
-            executeCommand(pstm, sell.getVender().getId(), totalOfSale, sell.getDateOfSale(), sell.getDeliveryFee());
+            executeCommand(pstm, sell.getVender().getId(),sell.getClient().getId(), totalOfSale, sell.getDateOfSale());
             rs = pstm.getGeneratedKeys();
             if (rs.next()) {
                 toReturn = rs.getInt(1);
@@ -63,7 +63,7 @@ public class SellDao extends GenericDao {
             JDBCConection.close(conn, pstm, rs);
         }
     }
-
+/*
     public void updateSell(Sell sell) throws PersistenceException {
         Connection conn = JDBCConection.getIntance().getConnection();
         PreparedStatement pstm = null;
@@ -73,7 +73,7 @@ public class SellDao extends GenericDao {
                 totalOfSale += item.getProduct().getPrice() * item.getQnt();
             }
             pstm = conn.prepareStatement(UPDATE_SELL);
-            executeCommand(pstm, sell.getVender().getId(), totalOfSale, sell.getDeliveryFee(), sell.getId());
+            executeCommand(pstm, sell.getVender().getId(), totalOfSale, sell.getId());
             for (SellItem item : sell.getItens()) {
                 sellItemDao.updateSellItem(item);
             }
@@ -82,7 +82,7 @@ public class SellDao extends GenericDao {
         } finally {
             JDBCConection.close(conn, pstm);
         }
-    }
+    }*/
 
     public void removeSell(Integer idSell) throws PersistenceException {
         Connection conn = JDBCConection.getIntance().getConnection();
@@ -139,32 +139,17 @@ public class SellDao extends GenericDao {
         return list;
     }
 
-    private Sell populateSellInfo(ResultSet rs) throws SQLException, PersistenceException {
+    public static Sell populateSellInfo(ResultSet rs) throws SQLException, PersistenceException {
         Sell toReturn = new Sell();
         User vender = new User();
         List<SellItem> sellItem = new LinkedList<>();
-        vender.setName(rs.getString("NAME"));
+        vender.setName(rs.getString("NAME_VENDER"));
+        toReturn.setClient(ClientDao.populateClientInfo(rs));
         toReturn.setId(rs.getInt("ID_SELL"));
         toReturn.setVender(vender);
         toReturn.setDateOfSale(rs.getDate("DATE_OF_SALE"));
         toReturn.setTotal(rs.getDouble("TOTAL"));
-        toReturn.setDeliveryFee(rs.getDouble("DELIVERY_FEE"));
-        while (rs.next()) {
-            sellItem.add(populateSellItemInfo(rs, toReturn));
-        }
-        toReturn.setItens(sellItem);
+        toReturn.setItens(sellItemDao.findSellItens(toReturn));
         return toReturn;
-    }
-
-    public SellItem populateSellItemInfo(ResultSet rs, Sell sell) throws SQLException, PersistenceException {
-        SellItem toReturn = new SellItem();
-        Product product = new Product();
-        product.setName(rs.getString("NAME_PRODUCT"));
-        product.setPrice(rs.getDouble("PRICE"));
-        toReturn.setId(rs.getInt("ID_SELL_ITEM"));
-        toReturn.setQnt(rs.getInt("QNT"));
-        toReturn.setProduct(product);
-        toReturn.setSell(sell);
-        return toReturn;
-    }
+    }    
 }

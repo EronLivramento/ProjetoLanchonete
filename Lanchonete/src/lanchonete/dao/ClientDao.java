@@ -15,10 +15,17 @@ public class ClientDao extends GenericDao{
     private static final String INSERT = "INSERT INTO CLIENT(NAME,SECOND_NAME,TELEPHONE,ID_ADRESS)VALUES(?,?,?,?)";
     private static final String UPDATE = "UPDATE CLIENT SET NAME = ?,SECOND_NAME = ?, TELEPHONE = ?,ID_ADRESS = ? WHERE ID= ?";
     private static final String REMOVE = "DELETE FROM CLIENT WHERE ID = ? AND ID_ADRESS = ?";
-    private static final String FIND_ALL = "SELECT * FROM CLIENT";
-    private static final String FIND_BY_TELEPHONE = "SELECT * FROM CLIENT WHERE TELEPHONE = ?";
-    private static final String FIND_BY_NAME = "SELECT * FROM CLIENT WHERE NAME = ?";
-    private static final String FIND_BY_ID = "SELECT * FROM CLIENT WHERE ID = ?";
+    private static final String FIND_ALL = "SELECT C.*,A.*  " +
+                                            "FROM CLIENT C, ADRESS A " +
+                                            "WHERE C.ID_ADRESS = A.ID";
+    private static final String FIND_BY_TELEPHONE = "SELECT C.*,A.*  " +
+                                                    "FROM CLIENT C, ADRESS A " +
+                                                    "WHERE C.ID_ADRESS = A.ID "
+                                                    + "AND TELEPHONE = ?";
+    private static final String FIND_BY_ID = "SELECT C.*,A.* " +
+                                            "FROM CLIENT C, ADRESS A " +
+                                            "WHERE C.ID_ADRESS = A.ID"
+                                            + " AND ID = ?";
     private static final AdressDao adress = new AdressDao();
     
     
@@ -94,25 +101,6 @@ public class ClientDao extends GenericDao{
         }
         return list;
     }
-    public List<Client> findByName(String name) throws PersistenceException{
-        List<Client> list = new LinkedList<>();
-        Connection conn = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-        try{
-            conn = JDBCConection.getIntance().getConnection();
-            pstm = conn.prepareStatement(FIND_BY_NAME);
-            rs = executeQuery(pstm,name);
-            while(rs.next()){
-                list.add(populateClientInfo(rs));
-            }
-        }catch(SQLException e){
-            throw new PersistenceException("Erro ao buscar clientes");
-        }finally{
-            JDBCConection.close(conn, pstm,rs);
-        }
-        return list;
-    }
     public Client findByTelephone(String telephone) throws PersistenceException{
         Client client = null;
         Connection conn = null;
@@ -157,7 +145,7 @@ public class ClientDao extends GenericDao{
         toReturn.setName(rs.getString("NAME"));
         toReturn.setSecondName(rs.getString("SECOND_NAME"));
         toReturn.setTelephone(rs.getString("TELEPHONE"));
-        toReturn.setAdress(adress.findById(rs.getInt("ID_ADRESS")));
+        toReturn.setAdress(AdressDao.populateAdressInfo(rs));
         return toReturn;
     }
 }

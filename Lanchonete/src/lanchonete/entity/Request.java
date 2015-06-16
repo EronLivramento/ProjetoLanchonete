@@ -5,8 +5,7 @@
  */
 package lanchonete.entity;
 
-import java.util.Date;
-import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -15,8 +14,53 @@ import java.util.List;
 public class Request {
     
     private Integer id;
-    private List<Product> product;
-    private TypeRequest type;
-    private Double total;
-    private Date dateOfRequest;
+    private Sell sell;
+    private Double deliveryFee;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Sell getSell() {
+        return sell;
+    }
+
+    public void setSell(Sell sell) {
+        this.sell = sell;
+    }
+
+    public Double getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(Double deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Request other = (Request) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
 }

@@ -25,12 +25,12 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
      * Creates new form FrmAddItemOfSell
      */
     private final List<SellItem> itens;
-    private FrmAddDeliverySell control;
+    private FrmAddSell frmAddSell;
 
-    public FrmAddItemOfSell(java.awt.Frame parent, boolean modal, List<SellItem> itens, FrmAddDeliverySell control) {
+    public FrmAddItemOfSell(java.awt.Frame parent, boolean modal, List<SellItem> itens, FrmAddSell frmAddSell) {
         super(parent, modal);
         this.itens = itens;
-        this.control = control;
+        this.frmAddSell = frmAddSell;
         initComponents();
         loadInitialComboData();
         refreshPrice();
@@ -184,20 +184,17 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         Integer qnt = Integer.parseInt(txtQnt.getText());
-        if(qnt < 0){
-            Message.addMessageError(new javax.swing.JFrame(),"Quantidade deve ser maior do que zero", "Erro", JOptionPane.ERROR_MESSAGE);
+        if (qnt < 0) {
+            Message.addMessageError(new javax.swing.JFrame(), "Quantidade deve ser maior do que zero", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int result = Message.showConfirm(new javax.swing.JFrame(), "Você tem certeza?", "Adicionar item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if(result == JOptionPane.OK_OPTION){
-            SellItem item = new SellItem();
-            item.setQnt(qnt);
-            item.setProduct((Product)cmbProduct.getSelectedItem());
-            itens.add(item);
-        }
+        SellItem item = new SellItem();
+        item.setQnt(qnt);
+        item.setProduct((Product) cmbProduct.getSelectedItem());
+        itens.add(item);
         this.dispose();
-        control.refreshItens();
-            
+        frmAddSell.refreshItens();
+
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void cmbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductMouseClicked
@@ -213,7 +210,7 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
     }//GEN-LAST:event_txtQntActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

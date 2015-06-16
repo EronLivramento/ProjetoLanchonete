@@ -13,12 +13,13 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import lanchonete.entity.Client;
+import lanchonete.entity.Request;
 import lanchonete.entity.Sell;
 import lanchonete.entity.SellItem;
 import lanchonete.entity.User;
 import lanchonete.exceptions.ServiceException;
 import lanchonete.service.ClientService;
-import lanchonete.service.SellService;
+import lanchonete.service.RequestService;
 import lanchonete.service.UserService;
 import lanchonete.util.Message;
 import lanchonete.util.MyTableModel;
@@ -27,19 +28,19 @@ import lanchonete.util.MyTableModel;
  *
  * @author Livramento
  */
-public class FrmAddDeliverySell extends javax.swing.JDialog {
+public class FrmAddRequest extends javax.swing.JDialog {
 
     /**
      * Creates new form frmAddSell
      */
     private List<SellItem> itens = new LinkedList<>();
     private final ClientService clientService = new ClientService();
-    private final SellService service;
+    private final RequestService service;
     private final UserService userService = new UserService();
     private Client client;
-    private final FrmSell control;
+    private final FrmRequest control;
 
-    public FrmAddDeliverySell(java.awt.Frame parent, boolean modal, SellService service, FrmSell control) {
+    public FrmAddRequest(java.awt.Frame parent, boolean modal, RequestService service, FrmRequest control) {
         super(parent, modal);
         this.service = service;
         this.control = control;
@@ -394,7 +395,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddItemOfSell dialog = new FrmAddItemOfSell(new javax.swing.JFrame(), true, itens, this);
+        FrmAddItemOfRequest dialog = new FrmAddItemOfRequest(new javax.swing.JFrame(), true, itens, this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -455,19 +456,22 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
         }
         int result = Message.showConfirm(new javax.swing.JFrame(), "Você tem certeza ?", "Finalizar venda", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
+            Request request = new Request();
             Sell sell = new Sell();
             sell.setDateOfSale(new java.sql.Date(new java.util.Date().getTime()));
-            sell.setDeliveryFee(Double.parseDouble(txtDeliveryFee.getText()));
+            
             sell.setTotal(Double.parseDouble(txtTotal.getText().substring(2)));
             sell.setVender((User) cmbVendor.getSelectedItem());
             sell.setItens(itens);
             for (SellItem sellItem : itens) {
                 sellItem.setSell(sell);
             }
-
+            sell.setClient(client);
+            request.setDeliveryFee(Double.parseDouble(txtDeliveryFee.getText()));
+            request.setSell(sell);
             try {
-                service.save(sell);
-                control.loadInitialData();
+                service.save(request);
+                control.loadInitalData();
             } catch (ServiceException e) {
                 Message.addMessageError(new javax.swing.JFrame(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }

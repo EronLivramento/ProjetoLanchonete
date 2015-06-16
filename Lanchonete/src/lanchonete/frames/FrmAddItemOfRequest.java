@@ -19,23 +19,33 @@ import lanchonete.util.Message;
  *
  * @author Livramento
  */
-public class FrmAddItemOfSell extends javax.swing.JDialog {
+public class FrmAddItemOfRequest extends javax.swing.JDialog {
 
     /**
      * Creates new form FrmAddItemOfSell
      */
     private final List<SellItem> itens;
-    private FrmAddDeliverySell control;
+    private FrmAddRequest frmAddRequest = null;
+    private FrmUpdateRequest frmUpdateRequest = null;
 
-    public FrmAddItemOfSell(java.awt.Frame parent, boolean modal, List<SellItem> itens, FrmAddDeliverySell control) {
+
+
+    public FrmAddItemOfRequest(java.awt.Frame parent, boolean modal, List<SellItem> itens, FrmAddRequest frmAddRequest) {
         super(parent, modal);
         this.itens = itens;
-        this.control = control;
+        this.frmAddRequest = frmAddRequest;
         initComponents();
         loadInitialComboData();
         refreshPrice();
     }
-
+    public FrmAddItemOfRequest(java.awt.Frame parent, boolean modal, List<SellItem> itens, FrmUpdateRequest frmUpdateRequest) {
+        super(parent, modal);
+        this.itens = itens;
+        this.frmUpdateRequest = frmUpdateRequest;
+        initComponents();
+        loadInitialComboData();
+        refreshPrice();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -184,20 +194,20 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         Integer qnt = Integer.parseInt(txtQnt.getText());
-        if(qnt < 0){
-            Message.addMessageError(new javax.swing.JFrame(),"Quantidade deve ser maior do que zero", "Erro", JOptionPane.ERROR_MESSAGE);
+        if (qnt < 0) {
+            Message.addMessageError(new javax.swing.JFrame(), "Quantidade deve ser maior do que zero", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int result = Message.showConfirm(new javax.swing.JFrame(), "Você tem certeza?", "Adicionar item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if(result == JOptionPane.OK_OPTION){
-            SellItem item = new SellItem();
-            item.setQnt(qnt);
-            item.setProduct((Product)cmbProduct.getSelectedItem());
-            itens.add(item);
-        }
+        SellItem item = new SellItem();
+        item.setQnt(qnt);
+        item.setProduct((Product) cmbProduct.getSelectedItem());
+        itens.add(item);
         this.dispose();
-        control.refreshItens();
-            
+        if(frmAddRequest != null){
+            frmAddRequest.refreshItens();
+        }else{
+            frmUpdateRequest.refreshItens();
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void cmbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbProductMouseClicked
@@ -213,7 +223,7 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
     }//GEN-LAST:event_txtQntActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

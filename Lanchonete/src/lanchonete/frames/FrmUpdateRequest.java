@@ -10,15 +10,18 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import lanchonete.entity.Client;
+import lanchonete.entity.Request;
 import lanchonete.entity.Sell;
 import lanchonete.entity.SellItem;
 import lanchonete.entity.User;
 import lanchonete.exceptions.ServiceException;
 import lanchonete.service.ClientService;
-import lanchonete.service.SellService;
+import lanchonete.service.RequestService;
 import lanchonete.service.UserService;
 import lanchonete.util.Message;
 import lanchonete.util.MyTableModel;
@@ -27,22 +30,24 @@ import lanchonete.util.MyTableModel;
  *
  * @author Livramento
  */
-public class FrmAddDeliverySell extends javax.swing.JDialog {
+public class FrmUpdateRequest extends javax.swing.JDialog {
 
     /**
      * Creates new form frmAddSell
      */
     private List<SellItem> itens = new LinkedList<>();
     private final ClientService clientService = new ClientService();
-    private final SellService service;
+    private final RequestService service;
     private final UserService userService = new UserService();
     private Client client;
-    private final FrmSell control;
+    private final FrmRequest control;
+    private final Request requestInEdit;
 
-    public FrmAddDeliverySell(java.awt.Frame parent, boolean modal, SellService service, FrmSell control) {
+    public FrmUpdateRequest(java.awt.Frame parent, boolean modal, RequestService service, FrmRequest control, Request requestInEdit) {
         super(parent, modal);
         this.service = service;
         this.control = control;
+        this.requestInEdit = requestInEdit;
         initComponents();
         loadInitialData();
         loadInitialComboData();
@@ -118,9 +123,11 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
 
         lblTelephone.setText("Telefone:");
 
+        txtTelephone.setEditable(false);
         txtTelephone.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         btnFind.setText("Buscar");
+        btnFind.setEnabled(false);
         btnFind.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFindActionPerformed(evt);
@@ -394,7 +401,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        FrmAddItemOfSell dialog = new FrmAddItemOfSell(new javax.swing.JFrame(), true, itens, this);
+        FrmAddItemOfRequest dialog = new FrmAddItemOfRequest(new javax.swing.JFrame(), true, itens, this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -407,17 +414,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDistrictActionPerformed
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        if (txtTelephone.getText().length() < 0 || txtTelephone.getText().length() > 8) {
-            Message.addMessageError(this, "Informe um telefone valido", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        try {
-            String telephone = txtTelephone.getText();
-            client = clientService.findByTelephone(telephone);
-            loadInitialData();
-        } catch (ServiceException e) {
-            Message.addMessageError(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+
     }//GEN-LAST:event_btnFindActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -455,23 +452,27 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
         }
         int result = Message.showConfirm(new javax.swing.JFrame(), "Você tem certeza ?", "Finalizar venda", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
+            Request request = new Request();
             Sell sell = new Sell();
             sell.setDateOfSale(new java.sql.Date(new java.util.Date().getTime()));
-            sell.setDeliveryFee(Double.parseDouble(txtDeliveryFee.getText()));
+
             sell.setTotal(Double.parseDouble(txtTotal.getText().substring(2)));
             sell.setVender((User) cmbVendor.getSelectedItem());
             sell.setItens(itens);
             for (SellItem sellItem : itens) {
                 sellItem.setSell(sell);
             }
-
+            request.setDeliveryFee(Double.parseDouble(txtDeliveryFee.getText()));
+            request.setSell(sell);
             try {
-                service.save(sell);
-                control.loadInitialData();
+                service.remove(request.getId());
+                service.save(request);
+                this.dispose();
+                control.loadInitalData();
+
             } catch (ServiceException e) {
                 Message.addMessageError(new javax.swing.JFrame(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-
         }
     }//GEN-LAST:event_btnOkActionPerformed
 
@@ -518,6 +519,7 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void loadInitialData() {
+        client = requestInEdit.getSell().getClient();
         if (client != null) {
             txtName.setText(client.getName());
             txtSecondName.setText(client.getSecondName());
@@ -553,4 +555,5 @@ public class FrmAddDeliverySell extends javax.swing.JDialog {
 
         }
     }
+
 }
