@@ -142,7 +142,6 @@ public class SellDao extends GenericDao {
     public static Sell populateSellInfo(ResultSet rs) throws SQLException, PersistenceException {
         Sell toReturn = new Sell();
         User vender = new User();
-        List<SellItem> sellItem = new LinkedList<>();
         vender.setName(rs.getString("NAME_VENDER"));
         toReturn.setClient(ClientDao.populateClientInfo(rs));
         toReturn.setId(rs.getInt("ID_SELL"));
