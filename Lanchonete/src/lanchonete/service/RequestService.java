@@ -35,7 +35,11 @@ public class RequestService {
             throw new ServiceException(ex.getMessage());
         }
     }
-    public void remove(Integer id){
-        
+    public void remove(Request request) throws ServiceException{
+        try{
+            dao.remove(request);
+        }catch(PersistenceException e){
+            throw new ServiceException(e.getMessage());
+        }
     }
 }

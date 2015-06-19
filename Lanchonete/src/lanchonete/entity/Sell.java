@@ -91,4 +91,9 @@ public class Sell {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return client.getName();
+    }
+
 }

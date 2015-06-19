@@ -472,6 +472,7 @@ public class FrmAddRequest extends javax.swing.JDialog {
             try {
                 service.save(request);
                 control.loadInitalData();
+                dispose();
             } catch (ServiceException e) {
                 Message.addMessageError(new javax.swing.JFrame(), e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }

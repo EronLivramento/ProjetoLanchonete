@@ -6,6 +6,7 @@
 package lanchonete.entity;
 
 import java.util.Objects;
+import lanchonete.util.SwingColumn;
 
 /**
  *
@@ -13,8 +14,11 @@ import java.util.Objects;
  */
 public class Request {
     
+    @SwingColumn(description = "Id")
     private Integer id;
+    @SwingColumn(description = "Cliente vendido")
     private Sell sell;
+    @SwingColumn(description = "Valor da entrega")
     private Double deliveryFee;
 
     public Integer getId() {

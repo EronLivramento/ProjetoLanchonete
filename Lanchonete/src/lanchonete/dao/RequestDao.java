@@ -21,23 +21,39 @@ import lanchonete.util.JDBCConection;
  */
 public class RequestDao extends GenericDao{
     
-    private static final String INSERT = "INSERT INTO(ID_SELL,DELIVERY_FEE)VALUES(?,?)";
+    private static final String INSERT = "INSERT INTO REQUEST(ID_SELL,DELIVERY_FEE)VALUES(?,?)";
     private static final String FIND_ALL = "SELECT R.*,S.*, C.*,A.*, V.NAME AS NAME_VENDER " +
                                 "FROM SELL S, CLIENT C,ADRESS A, REQUEST R, USER V " +
                                 "WHERE R.ID_SELL = S.ID_SELL\n" +
                                 "AND S.ID_CLIENT = C.ID\n" +
                                 "AND C.ID_ADRESS = A.ID \n" +
                                 "GROUP BY  S.id_sell";
-    
+    private static final String REMOVE = "DELETE FROM REQUEST WHERE ID=?";
+    private final SellDao sellDao = new SellDao();
     
     public void save(Request request) throws PersistenceException{
         Connection conn = JDBCConection.getIntance().getConnection();
         PreparedStatement pstm = null;
         try{
             pstm = conn.prepareStatement(INSERT);
+            sellDao.save(request.getSell());
             executeCommand(pstm, request.getSell().getId(),request.getDeliveryFee());
         }catch(SQLException e){
+            e.printStackTrace();
             throw new PersistenceException("Erro ao salvar este pedido");
+        }finally{
+            JDBCConection.close(conn, pstm);
+        }
+    }
+    public void remove(Request request) throws PersistenceException{
+        Connection conn = JDBCConection.getIntance().getConnection();
+        PreparedStatement pstm = null;
+        try{
+            pstm = conn.prepareStatement(REMOVE);
+            sellDao.removeSell(request.getSell().getId());
+            executeCommand(pstm, request.getId());
+        }catch(SQLException e){
+            throw new PersistenceException("Erro ao remover este pedido");
         }finally{
             JDBCConection.close(conn, pstm);
         }

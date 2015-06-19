@@ -5,10 +5,16 @@
  */
 package lanchonete.frames;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import lanchonete.entity.Request;
+import lanchonete.exceptions.ServiceException;
+import lanchonete.service.RequestService;
+import lanchonete.util.Message;
+import lanchonete.util.MyTableModel;
 
 /**
  *
@@ -19,6 +25,7 @@ public class FrmMain extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
+    private RequestService requestService = new RequestService();
     public FrmMain() {
           try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -26,6 +33,7 @@ public class FrmMain extends javax.swing.JFrame {
             Logger.getLogger(FrmLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
         initComponents();
+        refreshRequest();
     }
 
     /**
@@ -242,7 +250,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSellsActionPerformed
 
     private void btnRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestActionPerformed
-        FrmRequest dialog = new FrmRequest(new javax.swing.JFrame(), true);
+        FrmRequest dialog = new FrmRequest(new javax.swing.JFrame(), true,this,requestService);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnRequestActionPerformed
 
@@ -298,4 +306,13 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem miMenuVender;
     private javax.swing.JTable tblRequest;
     // End of variables declaration//GEN-END:variables
+
+    public void refreshRequest() {
+        try {
+            List<Request> listRequests = requestService.findAll();
+            tblRequest.setModel(new MyTableModel(Request.class, listRequests, tblRequest));
+        } catch (ServiceException e) {
+            Message.addMessage(this, e.getMessage());
+        }
+    }
 }

@@ -26,11 +26,20 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
      */
     private final List<SellItem> itens;
     private FrmAddSell frmAddSell;
+    private FrmUpdateSell frmUpdateSell;
 
     public FrmAddItemOfSell(java.awt.Frame parent, boolean modal, List<SellItem> itens, FrmAddSell frmAddSell) {
         super(parent, modal);
         this.itens = itens;
         this.frmAddSell = frmAddSell;
+        initComponents();
+        loadInitialComboData();
+        refreshPrice();
+    }
+    public FrmAddItemOfSell(java.awt.Frame parent, boolean modal, List<SellItem> itens, FrmUpdateSell frmUpdateSell) {
+        super(parent, modal);
+        this.itens = itens;
+        this.frmUpdateSell = frmUpdateSell;
         initComponents();
         loadInitialComboData();
         refreshPrice();
@@ -193,7 +202,12 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
         item.setProduct((Product) cmbProduct.getSelectedItem());
         itens.add(item);
         this.dispose();
-        frmAddSell.refreshItens();
+        if(frmAddSell != null){
+           frmAddSell.refreshItens(); 
+        }else{
+            frmUpdateSell.refreshItens(); 
+        }
+        
 
     }//GEN-LAST:event_btnAddActionPerformed
 

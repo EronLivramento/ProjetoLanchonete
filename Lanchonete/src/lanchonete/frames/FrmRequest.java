@@ -26,11 +26,14 @@ public class FrmRequest extends javax.swing.JDialog {
     /**
      * Creates new form FrmSell
      */
-    private final RequestService service = new RequestService();
+    private final RequestService service;
     private List<Request> listRequest;
+    private FrmMain control;
 
-    public FrmRequest(java.awt.Frame parent, boolean modal) {
+    public FrmRequest(java.awt.Frame parent, boolean modal,FrmMain control,RequestService service) {
         super(parent, modal);
+        this.control = control;
+        this.service = service;
         initComponents();
         loadInitalData();
         addSellTableListener();
@@ -251,6 +254,7 @@ public class FrmRequest extends javax.swing.JDialog {
             listRequest = service.findAll();
             tblRequest.setModel(new MyTableModel(Request.class, listRequest, tblRequest));
             tblSellItem.setModel(new MyTableModel(SellItem.class, new LinkedList<SellItem>(), tblSellItem));
+            control.refreshRequest();
         } catch (ServiceException ex) {
             Message.addMessageError(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
