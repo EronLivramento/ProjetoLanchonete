@@ -13,6 +13,7 @@ import lanchonete.entity.Product;
 import lanchonete.entity.SellItem;
 import lanchonete.exceptions.ServiceException;
 import lanchonete.service.ProductService;
+import lanchonete.service.SellService;
 import lanchonete.util.Message;
 
 /**
@@ -200,7 +201,7 @@ public class FrmAddItemOfSell extends javax.swing.JDialog {
         SellItem item = new SellItem();
         item.setQnt(qnt);
         item.setProduct((Product) cmbProduct.getSelectedItem());
-        itens.add(item);
+        SellService.addItem(itens,item);
         this.dispose();
         if(frmAddSell != null){
            frmAddSell.refreshItens(); 

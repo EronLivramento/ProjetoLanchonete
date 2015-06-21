@@ -8,6 +8,7 @@ package lanchonete.service;
 import java.util.List;
 import lanchonete.dao.SellDao;
 import lanchonete.entity.Sell;
+import lanchonete.entity.SellItem;
 import lanchonete.exceptions.PersistenceException;
 import lanchonete.exceptions.ServiceException;
 
@@ -40,6 +41,16 @@ public class SellService {
             dao.save(sell);
         } catch (PersistenceException ex) {
             throw new ServiceException(ex.getMessage());
+        }
+    }
+     public static void addItem(List<SellItem> items,SellItem item) {
+        if (items.contains(item)) {
+            int index = items.indexOf(item);
+            SellItem temp = (SellItem) items.get(index);
+            int qnt = temp.getQnt();
+            temp.setQnt(qnt + item.getQnt());
+        } else {
+            items.add(item);
         }
     }
 }

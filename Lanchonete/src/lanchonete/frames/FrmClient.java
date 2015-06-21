@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import lanchonete.entity.Client;
 import lanchonete.exceptions.ServiceException;
 import lanchonete.service.ClientService;
@@ -31,6 +33,7 @@ public class FrmClient extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         loadInitialData();
+        addClientTableListener();
     }
 
     /**
@@ -47,8 +50,24 @@ public class FrmClient extends javax.swing.JDialog {
         btnUpdate = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         tblClient = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        txtDistrict = new javax.swing.JTextField();
+        txtCity = new javax.swing.JTextField();
+        txtStreet = new javax.swing.JTextField();
+        txtNumber = new javax.swing.JTextField();
+        lblNumber = new javax.swing.JLabel();
+        lblDistrict = new javax.swing.JLabel();
+        lblCity = new javax.swing.JLabel();
+        lblStreet = new javax.swing.JLabel();
+        lblTelephone = new javax.swing.JLabel();
+        txtTelephone = new javax.swing.JTextField();
+        lblName = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        txtSecondName = new javax.swing.JTextField();
+        lblSecondName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Menu Cliente");
@@ -132,7 +151,116 @@ public class FrmClient extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblClient);
+        jScrollPane2.setViewportView(tblClient);
+
+        jTabbedPane1.addTab("Clientes", jScrollPane2);
+
+        txtDistrict.setEditable(false);
+
+        txtCity.setEditable(false);
+
+        txtStreet.setEditable(false);
+
+        txtNumber.setEditable(false);
+        txtNumber.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        lblNumber.setText("Numero:");
+
+        lblDistrict.setText("Bairro:");
+
+        lblCity.setText("Cidade: ");
+
+        lblStreet.setText("Rua:");
+
+        lblTelephone.setText("Telefone:");
+
+        txtTelephone.setEditable(false);
+        txtTelephone.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        lblName.setText("Nome:");
+
+        txtName.setEditable(false);
+        txtName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNameActionPerformed(evt);
+            }
+        });
+
+        txtSecondName.setEditable(false);
+
+        lblSecondName.setText("Sobrename:");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblCity)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCity))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblStreet)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtStreet))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblTelephone)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTelephone, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblSecondName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSecondName))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblNumber)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblDistrict)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 30, Short.MAX_VALUE)))
+                .addGap(16, 16, 16))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblName)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSecondName)
+                    .addComponent(txtSecondName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTelephone)
+                    .addComponent(txtTelephone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStreet)
+                    .addComponent(txtStreet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumber)
+                    .addComponent(txtNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCity)
+                    .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDistrict)
+                    .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(223, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Endereco", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,8 +269,8 @@ public class FrmClient extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -150,8 +278,8 @@ public class FrmClient extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -180,7 +308,7 @@ public class FrmClient extends javax.swing.JDialog {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        FrmAddClient dialog = new FrmAddClient(new javax.swing.JFrame(), true, service,this);
+        FrmAddClient dialog = new FrmAddClient(new javax.swing.JFrame(), true, service, this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
 
@@ -189,9 +317,13 @@ public class FrmClient extends javax.swing.JDialog {
             Message.addMessageError(this, "Por favor selecione o cliente que deseja alterar!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        FrmUpdateClient dialog = new FrmUpdateClient(new javax.swing.JFrame(), true, service,this,listClient.get(tblClient.getSelectedRow()));
+        FrmUpdateClient dialog = new FrmUpdateClient(new javax.swing.JFrame(), true, service, this, listClient.get(tblClient.getSelectedRow()));
         dialog.setVisible(true);
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,8 +373,24 @@ public class FrmClient extends javax.swing.JDialog {
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblCity;
+    private javax.swing.JLabel lblDistrict;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblNumber;
+    private javax.swing.JLabel lblSecondName;
+    private javax.swing.JLabel lblStreet;
+    private javax.swing.JLabel lblTelephone;
     private javax.swing.JTable tblClient;
+    private javax.swing.JTextField txtCity;
+    private javax.swing.JTextField txtDistrict;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtNumber;
+    private javax.swing.JTextField txtSecondName;
+    private javax.swing.JTextField txtStreet;
+    private javax.swing.JTextField txtTelephone;
     // End of variables declaration//GEN-END:variables
 
     public void loadInitialData() {
@@ -252,5 +400,31 @@ public class FrmClient extends javax.swing.JDialog {
             Message.addMessageError(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
         tblClient.setModel(new MyTableModel(Client.class, listClient, tblClient));
+    }
+
+    private void addClientTableListener() {
+        tblClient.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                try {
+                    Client selectedClient = listClient.get(tblClient.getSelectedRow());
+                    tblClient.setModel(new MyTableModel(Client.class, listClient, tblClient));
+                    initialMyClient(selectedClient);
+                } catch (Exception ex) {
+
+                }
+            }
+        });
+    }
+
+    private void initialMyClient(Client client) {
+        txtName.setText(client.getName());
+        txtSecondName.setText(client.getSecondName());
+        txtTelephone.setText(client.getTelephone());
+        txtStreet.setText(client.getAdress().getStreet());
+        txtNumber.setText(String.valueOf(client.getAdress().getNumber()));
+        txtCity.setText(client.getAdress().getCity());
+        txtDistrict.setText(client.getAdress().getDistrict());
     }
 }
